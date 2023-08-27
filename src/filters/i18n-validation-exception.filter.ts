@@ -40,8 +40,9 @@ export class I18nValidationExceptionFilter implements ExceptionFilter {
           .send({
             statusCode:
               this.options.errorHttpStatusCode || exception.getStatus(),
-            message: exception.getResponse(),
-            errors: this.normalizeValidationErrors(errors),
+            status: "ERROR",  
+            message: Object.values(errors[0]?.constraints)[0] || "",
+            data: this.normalizeValidationErrors(errors),
           });
         break;
       case 'graphql':

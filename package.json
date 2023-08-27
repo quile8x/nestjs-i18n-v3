@@ -22,7 +22,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/ToonvanStrijp/nestjs-i18n"
+    "url": "https://github.com/quile8x/nestjs-i18n-v3"
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
