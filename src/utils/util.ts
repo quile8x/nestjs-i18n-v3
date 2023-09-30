@@ -25,9 +25,9 @@ function validationErrorToI18n(e: ValidationError): I18nValidationError {
     children: e?.children?.map(validationErrorToI18n),
     constraints: !!e.constraints
       ? Object.keys(e.constraints).reduce((result, key) => {
-          result[key] = e.constraints[key];
-          return result;
-        }, {})
+        result[key] = e.constraints[key];
+        return result;
+      }, {})
       : {},
   };
 }
@@ -69,16 +69,19 @@ export function formatI18nErrors<K = Record<string, unknown>>(
         true,
         false,
       )
-      .find(
+      .filter(
         (meta) =>
           meta.target === error.target.constructor &&
           meta.propertyName === error.property,
       );
-    const constraints = Object.assign({}, limits?.constraints);
+    //const constraints = Object.assign({}, limits?.constraints);
     error.children = formatI18nErrors(error.children ?? [], i18n, options);
     error.constraints = Object.keys(error.constraints).reduce((result, key) => {
       const [translationKey, argsString] = error.constraints[key].split('|');
       const args = !!argsString ? JSON.parse(argsString) : {};
+      const limit = limits.find((item) => item.name === key);
+      let constraint = Object.assign({}, limit?.constraints);
+
       result[key] = i18n.translate(translationKey as Path<K>, {
         ...options,
         args: {
@@ -86,7 +89,8 @@ export function formatI18nErrors<K = Record<string, unknown>>(
           value: error.value,
           target: error.target,
           contexts: error.contexts,
-          constraints: constraints,
+          //constraints: constraints,
+          constraints: constraint,
           ...args,
         },
       });
